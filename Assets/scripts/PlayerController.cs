@@ -18,9 +18,16 @@ public class PlayerController : NetworkBehaviour
     // direction 
     private Vector2 heading;
     private Vector2 direction;
-    [SyncVar(hook = "OnSpriteFlip")]
-    float localScale;
+
+    //[SyncVar(hook = "OnSpriteFlip")]
+    //float localScale;
     // turn ON fire
+    public GameObject spriteObj;
+
+    // prevent change child scale (on flip)
+    public GameObject hpBarObj;
+
+
     public bool spawnProj;
 
     public GameObject projectilePrefab;
@@ -33,6 +40,9 @@ public class PlayerController : NetworkBehaviour
         if (!isServer) {
             CmdSendClientName("client-" + DateTime.Now);
         }
+        //hpBarObj.transform.SetParent(transform, false);
+        transform.SetParent(hpBarObj.transform, false);
+
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -134,13 +144,13 @@ public class PlayerController : NetworkBehaviour
         // SPRITE FLIP
         if (facing == Direction.BottomRight || facing == Direction.Right || facing == Direction.TopRight)
         {
-            OnSpriteFlip(-1);
-            //transform.localScale = new Vector3(-1, 1, 1);
+            //OnSpriteFlip(-1);
+            CmdFlipSprite(-1);
         }
         else
         {
-            OnSpriteFlip(1);
-            //transform.localScale = new Vector3(1, 1, 1);
+            //OnSpriteFlip(1);
+            CmdFlipSprite(1);
         }
 
         // PROJECTILE 
@@ -154,7 +164,8 @@ public class PlayerController : NetworkBehaviour
 
     public override void OnStartLocalPlayer()
     {
-        GetComponent<SpriteRenderer>().sprite = spriteLocal;
+        //GetComponent<SpriteRenderer>().sprite = spriteLocal;
+        spriteObj.GetComponent<SpriteRenderer>().sprite = spriteLocal;
     }
 
 
@@ -227,7 +238,8 @@ public class PlayerController : NetworkBehaviour
     void OnSpriteFlip(float localScale)
     {
         CmdFlipSprite(localScale);
-        transform.localScale = new Vector3(localScale, 1, 1);
+        spriteObj.transform.localScale = new Vector3(localScale, 1, 1);
+        //transform.localScale = new Vector3(localScale, 1, 1);
     }
    
    [Command]
@@ -238,8 +250,9 @@ public class PlayerController : NetworkBehaviour
    [ClientRpc]
    void RpcFlipSprite(float localScale)
    {
-       transform.localScale = new Vector3(localScale, 1, 1);
-   }
+       //transform.localScale = new Vector3(localScale, 1, 1);
+       spriteObj.transform.localScale = new Vector3(localScale, 1, 1);
+    }
 
 
     [Command]
