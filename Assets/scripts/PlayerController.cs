@@ -204,7 +204,7 @@ public class PlayerController : NetworkBehaviour
         var stepTime = 100;
         var stepSize = 0.25f;
         var stepTimeD = 100;
-        var stepSizeD = 0.25f;
+        var stepSizeD = 0.20f;
 
         switch (facing)
         {
