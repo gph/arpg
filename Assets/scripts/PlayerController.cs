@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -29,6 +30,9 @@ public class PlayerController : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
+        if (!isServer) {
+            CmdSendClientName("client-" + DateTime.Now);
+        }
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -130,20 +134,13 @@ public class PlayerController : NetworkBehaviour
         // SPRITE FLIP
         if (facing == Direction.BottomRight || facing == Direction.Right || facing == Direction.TopRight)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
-            //healthBarObj.transform.localScale = new Vector3(-0.01f, healthBarObj.transform.localScale.y, healthBarObj.transform.localScale.z);
-            //CmdFlipSprite(-1);
-            //localScale = transform.localScale.x;
-            //OnSpriteFlip(-1);
+            OnSpriteFlip(-1);
+            //transform.localScale = new Vector3(-1, 1, 1);
         }
         else
         {
-            transform.localScale = new Vector3(1, 1, 1);
-            //healthBarObj.transform.localScale = new Vector3(0.01f, healthBarObj.transform.localScale.y, healthBarObj.transform.localScale.z);
-            //CmdFlipSprite(1);
-            //localScale = transform.localScale.x;
-            //OnSpriteFlip(-1);
-
+            OnSpriteFlip(1);
+            //transform.localScale = new Vector3(1, 1, 1);
         }
 
         // PROJECTILE 
@@ -160,7 +157,7 @@ public class PlayerController : NetworkBehaviour
         GetComponent<SpriteRenderer>().sprite = spriteLocal;
     }
 
-    [Command]
+
     /*    void CmdFire()
         {
             RpcFire();
@@ -169,6 +166,7 @@ public class PlayerController : NetworkBehaviour
        // [ClientRpc]
         void RpcFire()
         */
+    [Command]
     void CmdFire(Vector2 mouseTarget, Vector2 projectileSpawnPos)
     {
         obj2Bdestroyed = Instantiate(projectilePrefab, projectileSpawnPos, transform.rotation);
@@ -183,7 +181,6 @@ public class PlayerController : NetworkBehaviour
         Destroy(obj2Bdestroyed, 2.0f);
 
     }
-
     void CmdStep()
     {
         var stepTime = 10;
@@ -198,7 +195,6 @@ public class PlayerController : NetworkBehaviour
             case Direction.Right:
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x + 1, transform.position.y, transform.position.z), Time.deltaTime * stepTime);
                 targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
-                transform.localScale = new Vector3(-1, 1, 1);
                 break;
             case Direction.Bottom:
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y - 1, transform.position.z), Time.deltaTime * stepTime);
@@ -207,7 +203,6 @@ public class PlayerController : NetworkBehaviour
             case Direction.Left:
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x - 1, transform.position.y, transform.position.z), Time.deltaTime * stepTime);
                 targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
-                transform.localScale = new Vector3(1, 1, 1);
                 break;
 
             // DIAGONAL
@@ -229,18 +224,28 @@ public class PlayerController : NetworkBehaviour
                 break;
         }
     }
-   
     void OnSpriteFlip(float localScale)
     {
-        //RpcFlipSprite(transformLocalScaleX);
+        CmdFlipSprite(localScale);
         transform.localScale = new Vector3(localScale, 1, 1);
     }
-    /*
+   
+   [Command]
+   void CmdFlipSprite(float localScale)
+    {
+        RpcFlipSprite(localScale);
+    }
    [ClientRpc]
-   void RpcFlipSprite(float transformLocalScaleX)
+   void RpcFlipSprite(float localScale)
    {
-       transform.localScale = new Vector3(transformLocalScaleX, 1, 1);
+       transform.localScale = new Vector3(localScale, 1, 1);
    }
 
-   */
+
+    [Command]
+    void CmdSendClientName(string name)
+    {
+        transform.name = name;
+        Debug.Log(transform.name);
+    }
 }
