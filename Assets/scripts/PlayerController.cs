@@ -37,6 +37,7 @@ public class PlayerController : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
+        
         if (!isServer) {
             CmdSendClientName("client-" + DateTime.Now);
         }
@@ -46,7 +47,7 @@ public class PlayerController : NetworkBehaviour
         }
         //hpBarObj.transform.SetParent(transform, false);
         transform.SetParent(hpBarObj.transform, false);
-
+        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -57,25 +58,27 @@ public class PlayerController : NetworkBehaviour
         }
         // PLAYER MOVEMENT
         /*
-        if (Input.GetKey(KeyCode.Mouse0))
-        {
-            targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        }
-        transform.position = Vector2.MoveTowards(transform.position, targetPosition, Time.deltaTime * 5);
-        Camera.main.transform.position = Vector3.MoveTowards(Camera.main.transform.position, new Vector3(targetPosition.x, targetPosition.y, Camera.main.transform.position.z), Time.deltaTime * 5);
-        */
+ if (Input.GetKey(KeyCode.Mouse0))
+ {
+     targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+ }
+ transform.position = Vector2.MoveTowards(transform.position, targetPosition, Time.deltaTime * 5);
+ Camera.main.transform.position = Vector3.MoveTowards(Camera.main.transform.position, new Vector3(targetPosition.x, targetPosition.y, Camera.main.transform.position.z), Time.deltaTime * 5);
+
+    */
         timePerStep -= Time.deltaTime;
         if (Input.GetKey(KeyCode.Mouse0))
         {
-            
-            if (timePerStep < 0)
-            {
-                Step();
-                timePerStep = 0.1f;
-            }
+
+        if (timePerStep < 0)
+        {
+            Step();
+            timePerStep = 0.1f;
+        }
         }
 
         Camera.main.transform.position = Vector3.MoveTowards(Camera.main.transform.position, new Vector3(targetPosition.x, targetPosition.y, Camera.main.transform.position.z), Time.deltaTime * 100);
+
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         // SET DIRECTION
@@ -198,43 +201,46 @@ public class PlayerController : NetworkBehaviour
     }
     void Step()
     {
-        var stepTime = 10;
-        var stepTime2 = 10;
+        var stepTime = 100;
+        var stepSize = 0.25f;
+        var stepTimeD = 100;
+        var stepSizeD = 0.25f;
+
         switch (facing)
         {
             case Direction.Top:
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), Time.deltaTime * stepTime);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y + stepSize, transform.position.z), Time.deltaTime * stepTime);
                 targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
                 break;
 
             case Direction.Right:
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x + 1, transform.position.y, transform.position.z), Time.deltaTime * stepTime);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x + stepSize, transform.position.y, transform.position.z), Time.deltaTime * stepTime);
                 targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
                 break;
             case Direction.Bottom:
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y - 1, transform.position.z), Time.deltaTime * stepTime);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y - stepSize, transform.position.z), Time.deltaTime * stepTime);
                 targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
                 break;
             case Direction.Left:
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x - 1, transform.position.y, transform.position.z), Time.deltaTime * stepTime);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x - stepSize, transform.position.y, transform.position.z), Time.deltaTime * stepTime);
                 targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
                 break;
 
             // DIAGONAL
             case Direction.TopRight:
-                transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x + 1, transform.position.y + 1, transform.position.z), Time.deltaTime * stepTime2);
+                transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x + stepSizeD, transform.position.y + stepSizeD, transform.position.z), Time.deltaTime * stepTimeD);
                 targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
                 break;
             case Direction.TopLeft:
-                transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x - 1, transform.position.y + 1, transform.position.z), Time.deltaTime * stepTime2);
+                transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x - stepSizeD, transform.position.y + stepSizeD, transform.position.z), Time.deltaTime * stepTimeD);
                 targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
                 break;
             case Direction.BottomRight:
-                transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x + 1, transform.position.y - 1, transform.position.z), Time.deltaTime * stepTime2);
+                transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x + stepSizeD, transform.position.y - stepSizeD, transform.position.z), Time.deltaTime * stepTimeD);
                 targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
                 break;
             case Direction.BottomLeft:
-                transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x - 1, transform.position.y - 1, transform.position.z), Time.deltaTime * stepTime2);
+                transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x - stepSizeD, transform.position.y - stepSizeD, transform.position.z), Time.deltaTime * stepTimeD);
                 targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
                 break;
         }
