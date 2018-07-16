@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        //Debug.Log("COLLISION: " + transform.name + " x " + collision.transform.name);
         var hit = collision.gameObject;
         var health = hit.GetComponent<Health>();
         if (health != null)

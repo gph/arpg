@@ -14,6 +14,18 @@ public class Health : NetworkBehaviour
 
     public RectTransform healthBar;
 
+    public bool destroyOnDeath;
+
+    private NetworkStartPosition[] spawnPoints;
+
+    void Start()
+    {
+        if (isLocalPlayer)
+        {
+            spawnPoints = FindObjectsOfType<NetworkStartPosition>();
+        }
+    }
+
     public void TakeDamage(int amount)
     {
         if (!isServer)
@@ -22,12 +34,43 @@ public class Health : NetworkBehaviour
         currentHealth -= amount;
         if (currentHealth <= 0)
         {
-            currentHealth = 0;
-            Debug.Log("Dead!");
+
+            if (destroyOnDeath)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                Debug.Log(transform.name + " is DEAD!");
+                gameObject.SetActive(false);
+                currentHealth = maxHealth;
+                // called on the Server, but invoked on the Clients
+                RpcRespawn();
+                gameObject.SetActive(true);
+            }
+
         }
     }
     void OnChangeHealth(int health)
     {
         healthBar.sizeDelta = new Vector2(health, healthBar.sizeDelta.y);
+    }
+    [ClientRpc]
+    void RpcRespawn()
+    {
+        if (isLocalPlayer)
+        {
+            // Set the spawn point to origin as a default value
+            Vector3 spawnPoint = Vector3.zero;
+
+            // If there is a spawn point array and the array is not empty, pick a spawn point at random
+            if (spawnPoints != null && spawnPoints.Length > 0)
+            {
+                spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position;
+            }
+
+            // Set the player’s position to the chosen spawn point
+            transform.position = spawnPoint;
+        }
     }
 }

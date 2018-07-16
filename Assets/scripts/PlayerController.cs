@@ -40,6 +40,10 @@ public class PlayerController : NetworkBehaviour
         if (!isServer) {
             CmdSendClientName("client-" + DateTime.Now);
         }
+        else
+        {
+            CmdSendClientName("server-" + DateTime.Now);
+        }
         //hpBarObj.transform.SetParent(transform, false);
         transform.SetParent(hpBarObj.transform, false);
 
@@ -66,7 +70,7 @@ public class PlayerController : NetworkBehaviour
             
             if (timePerStep < 0)
             {
-                CmdStep();
+                Step();
                 timePerStep = 0.1f;
             }
         }
@@ -192,7 +196,7 @@ public class PlayerController : NetworkBehaviour
         Destroy(obj2Bdestroyed, 2.0f);
 
     }
-    void CmdStep()
+    void Step()
     {
         var stepTime = 10;
         var stepTime2 = 10;
@@ -258,7 +262,12 @@ public class PlayerController : NetworkBehaviour
     [Command]
     void CmdSendClientName(string name)
     {
+        RpcSendClientName(name);
+    }
+    [ClientRpc]
+    void RpcSendClientName(string name)
+    {
         transform.name = name;
-        Debug.Log(transform.name);
+        //Debug.Log(transform.name);
     }
 }
