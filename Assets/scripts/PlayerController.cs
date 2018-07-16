@@ -10,17 +10,15 @@ public class PlayerController : NetworkBehaviour
 
     // mouse movement
     private Vector2 targetPosition;
-    enum Direction {TopLeft, Top, TopRight, Right, BottomRight, Bottom, BottomLeft, Left};
+    enum Direction { TopLeft, Top, TopRight, Right, BottomRight, Bottom, BottomLeft, Left };
     Direction facing;
     float timePerStep = 0.1f;
 
     // direction 
     private Vector2 heading;
     private Vector2 direction;
-
-    // healthbar direction
-
-    public Canvas healthbar;
+    [SyncVar(hook = "OnSpriteFlip")]
+    float localScale;
     // turn ON fire
     public bool spawnProj;
 
@@ -54,33 +52,9 @@ public class PlayerController : NetworkBehaviour
             
             if (timePerStep < 0)
             {
-                Cmdstep();
+                CmdStep();
                 timePerStep = 0.1f;
             }
-
-            /*
-            var stepTime = 100;
-            if (facing == Direction.Top)
-            { 
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), Time.deltaTime * stepTime);
-                targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
-            }
-            if (facing == Direction.Right)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x + 1, transform.position.y, transform.position.z), Time.deltaTime * stepTime);
-                targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
-            }
-            if (facing == Direction.Bottom)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y - 1, transform.position.z), Time.deltaTime * stepTime);
-                targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
-            }
-            if (facing == Direction.Left)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x - 1, transform.position.y, transform.position.z), Time.deltaTime * stepTime);
-                targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
-            }
-            */
         }
 
         Camera.main.transform.position = Vector3.MoveTowards(Camera.main.transform.position, new Vector3(targetPosition.x, targetPosition.y, Camera.main.transform.position.z), Time.deltaTime * 100);
@@ -153,13 +127,23 @@ public class PlayerController : NetworkBehaviour
             }
         }
 
+        // SPRITE FLIP
         if (facing == Direction.BottomRight || facing == Direction.Right || facing == Direction.TopRight)
         {
-            transform.localScale = new Vector3(-1,1,1);
+            transform.localScale = new Vector3(-1, 1, 1);
+            //healthBarObj.transform.localScale = new Vector3(-0.01f, healthBarObj.transform.localScale.y, healthBarObj.transform.localScale.z);
+            //CmdFlipSprite(-1);
+            //localScale = transform.localScale.x;
+            //OnSpriteFlip(-1);
         }
         else
         {
             transform.localScale = new Vector3(1, 1, 1);
+            //healthBarObj.transform.localScale = new Vector3(0.01f, healthBarObj.transform.localScale.y, healthBarObj.transform.localScale.z);
+            //CmdFlipSprite(1);
+            //localScale = transform.localScale.x;
+            //OnSpriteFlip(-1);
+
         }
 
         // PROJECTILE 
@@ -167,7 +151,6 @@ public class PlayerController : NetworkBehaviour
         {
             CmdFire(Camera.main.ScreenToWorldPoint(Input.mousePosition), projectileSpawn.transform.position);
         }
-
         // TRASH
         // Debug.Log(mouseTarget);
     }
@@ -201,12 +184,10 @@ public class PlayerController : NetworkBehaviour
 
     }
 
-
-    void Cmdstep()
+    void CmdStep()
     {
-        var stepTime = 50;
-        var stepTime2 = 80;
-
+        var stepTime = 10;
+        var stepTime2 = 10;
         switch (facing)
         {
             case Direction.Top:
@@ -217,6 +198,7 @@ public class PlayerController : NetworkBehaviour
             case Direction.Right:
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x + 1, transform.position.y, transform.position.z), Time.deltaTime * stepTime);
                 targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
+                transform.localScale = new Vector3(-1, 1, 1);
                 break;
             case Direction.Bottom:
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y - 1, transform.position.z), Time.deltaTime * stepTime);
@@ -225,6 +207,7 @@ public class PlayerController : NetworkBehaviour
             case Direction.Left:
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x - 1, transform.position.y, transform.position.z), Time.deltaTime * stepTime);
                 targetPosition = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
+                transform.localScale = new Vector3(1, 1, 1);
                 break;
 
             // DIAGONAL
@@ -246,4 +229,18 @@ public class PlayerController : NetworkBehaviour
                 break;
         }
     }
+   
+    void OnSpriteFlip(float localScale)
+    {
+        //RpcFlipSprite(transformLocalScaleX);
+        transform.localScale = new Vector3(localScale, 1, 1);
+    }
+    /*
+   [ClientRpc]
+   void RpcFlipSprite(float transformLocalScaleX)
+   {
+       transform.localScale = new Vector3(transformLocalScaleX, 1, 1);
+   }
+
+   */
 }
