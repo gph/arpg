@@ -104,12 +104,12 @@ public class PlayerController : NetworkBehaviour
 
         // SET DIRECTION
 
-        if (mousePos.x > transform.position.x)
+        if (mousePos.x > transform.position.x + 0.5f)
         {
             if (mousePos.y > transform.position.y + 0.5f)
             {
                 // TOPRIGHT
-                //projectileSpawn.transform.position = new Vector3(transform.position.x + 1, transform.position.y + 1, transform.position.z);
+                //projectileSpawn.transform.position = new Vector3(transform.position.x + 0.5f, transform.position.y + 0.5f, transform.position.z);
                 facing = Direction.TopRight;
             }
             else
@@ -117,13 +117,13 @@ public class PlayerController : NetworkBehaviour
                 if (mousePos.y < transform.position.y - 0.5f)
                 {
                     // BOTTOMRIGHT
-                    //projectileSpawn.transform.position = new Vector3(transform.position.x + 1, transform.position.y - 1, transform.position.z);
+                    //projectileSpawn.transform.position = new Vector3(transform.position.x + 0.5f, transform.position.y - 0.5f, transform.position.z);
                     facing = Direction.BottomRight;
                 }
                 else
                 {
                     // RIGHT
-                    //projectileSpawn.transform.position = new Vector3(transform.position.x + 1, transform.position.y, transform.position.z);
+                    //projectileSpawn.transform.position = new Vector3(transform.position.x + 0.5f, transform.position.y, transform.position.z);
                     facing = Direction.Right;
                 }
             }
@@ -135,7 +135,7 @@ public class PlayerController : NetworkBehaviour
                 if (mousePos.y > transform.position.y + 0.5f)
                 {
                     //TOPLEFT
-                    //projectileSpawn.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, transform.position.z);
+                    //projectileSpawn.transform.position = new Vector3(transform.position.x - 0.5f, transform.position.y + 0.5f, transform.position.z);
                     facing = Direction.TopLeft;
                 }
                 else
@@ -143,13 +143,13 @@ public class PlayerController : NetworkBehaviour
                     if (mousePos.y < transform.position.y - 0.5f)
                     {
                         // BOTTOMLEFT
-                        //projectileSpawn.transform.position = new Vector3(transform.position.x - 1, transform.position.y - 1, transform.position.z);
+                        //projectileSpawn.transform.position = new Vector3(transform.position.x - 0.5f, transform.position.y - 0.5f, transform.position.z);
                         facing = Direction.BottomLeft;
                     }
                     else
                     {
                         // LEFT
-                        //projectileSpawn.transform.position = new Vector3(transform.position.x - 1, transform.position.y, transform.position.z);
+                        //projectileSpawn.transform.position = new Vector3(transform.position.x - 0.5f, transform.position.y, transform.position.z);
                         facing = Direction.Left;
                     }
                 }
@@ -159,7 +159,7 @@ public class PlayerController : NetworkBehaviour
                 if (mousePos.y > transform.position.y + 0.5f)
                 {
                     // TOP
-                    //projectileSpawn.transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+                    //projectileSpawn.transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
                     facing = Direction.Top;
                 }
                 else
@@ -167,7 +167,7 @@ public class PlayerController : NetworkBehaviour
                     if (mousePos.y < transform.position.y - 0.5f)
                     {
                         //BOTTOM
-                        //projectileSpawn.transform.position = new Vector3(transform.position.x, transform.position.y - 1, transform.position.z);
+                        //projectileSpawn.transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
                         facing = Direction.Bottom;
                     }
                     else
@@ -178,8 +178,16 @@ public class PlayerController : NetworkBehaviour
                 }
             }
         }
-
-
+        /*
+        if (facing == Direction.Center)
+        {
+            projectileSpawn.gameObject.SetActive(false);
+        }
+        else
+        {
+            projectileSpawn.gameObject.SetActive(true);
+        }
+        */
         // FLIP_SPRITE
         if (facing == Direction.BottomRight || facing == Direction.Right || facing == Direction.TopRight)
         {

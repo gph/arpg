@@ -13,7 +13,7 @@ public class CHAT : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (inputField.text != "" && Input.GetKey(KeyCode.Return))
+        if (inputField.text != "" && (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter)))
         {
             //Debug.Log(inputField.text);
             CmdSendMessage(inputField.text);
