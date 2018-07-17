@@ -24,6 +24,7 @@ public class PlayerController : NetworkBehaviour
     //float localScale;
     // turn ON fire
     public GameObject spriteObj;
+    public GameObject objDirection;
 
     // prevent change child scale (on flip)
     public GameObject hpBarObj;
@@ -225,7 +226,7 @@ public class PlayerController : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         //GetComponent<SpriteRenderer>().sprite = spriteLocal;
-        spriteObj.GetComponent<SpriteRenderer>().sprite = spriteLocal;
+        //spriteObj.GetComponent<SpriteRenderer>().sprite = spriteLocal;
     }
 
 
@@ -241,6 +242,7 @@ public class PlayerController : NetworkBehaviour
     void CmdFire(Vector2 mouseTarget, Vector2 projectileSpawnPos)
     {
         obj2Bdestroyed = Instantiate(projectilePrefab, projectileSpawnPos, transform.rotation);
+        obj2Bdestroyed.transform.parent = gameObject.transform;
         heading = mouseTarget - new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
         direction = heading / heading.magnitude;
         obj2Bdestroyed.GetComponent<Rigidbody2D>().velocity = direction * 30;
@@ -302,7 +304,6 @@ public class PlayerController : NetworkBehaviour
     {
         CmdFlipSprite(localScale);
         spriteObj.transform.localScale = new Vector3(localScale, 1, 1);
-        //transform.localScale = new Vector3(localScale, 1, 1);
     }
 
     [Command]
@@ -313,8 +314,9 @@ public class PlayerController : NetworkBehaviour
     [ClientRpc]
     void RpcFlipSprite(float localScale)
     {
-        //transform.localScale = new Vector3(localScale, 1, 1);
-        spriteObj.transform.localScale = new Vector3(localScale, 1, 1);
+        //spriteObj.transform.localScale = new Vector3(localScale, 1, 1);
+        objDirection.transform.localScale = new Vector3(localScale, 1, 1);
+        //projectileSpawn.transform.localPosition = new Vector3(projectileSpawn.transform.position.x * -1, 0, 0);
     }
 
 
