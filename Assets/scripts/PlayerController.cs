@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 public class PlayerController : NetworkBehaviour
 {
     // change local player sprite
@@ -11,7 +12,7 @@ public class PlayerController : NetworkBehaviour
 
     // mouse movement
     private Vector2 targetPosition;
-    enum Direction { TopLeft, Top, TopRight, Right, BottomRight, Bottom, BottomLeft, Left };
+    enum Direction { TopLeft, Top, TopRight, Right, BottomRight, Bottom, BottomLeft, Left, Center };
     Direction facing;
     float timePerStep = 0.1f;
 
@@ -48,6 +49,7 @@ public class PlayerController : NetworkBehaviour
         }
         //hpBarObj.transform.SetParent(transform, false);
         transform.SetParent(hpBarObj.transform, false);
+        targetPosition = new Vector2(transform.position.x, transform.position.y);
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -56,6 +58,7 @@ public class PlayerController : NetworkBehaviour
         {
             return;
         }
+
         // PLAYER MOVEMENT
         /*
  if (Input.GetKey(KeyCode.Mouse0))
@@ -83,6 +86,11 @@ public class PlayerController : NetworkBehaviour
         timePerStep -= Time.deltaTime;
         if (Input.GetKey(KeyCode.Mouse0))
         {
+            // AVOID CLICKS THROUGH INTERFACE
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
             if (timePerStep < 0)
             {
                 Step();
@@ -98,7 +106,7 @@ public class PlayerController : NetworkBehaviour
 
         if (mousePos.x > transform.position.x)
         {
-            if (mousePos.y > transform.position.y)
+            if (mousePos.y > transform.position.y + 0.5f)
             {
                 // TOPRIGHT
                 //projectileSpawn.transform.position = new Vector3(transform.position.x + 1, transform.position.y + 1, transform.position.z);
@@ -106,7 +114,7 @@ public class PlayerController : NetworkBehaviour
             }
             else
             {
-                if (mousePos.y < transform.position.y)
+                if (mousePos.y < transform.position.y - 0.5f)
                 {
                     // BOTTOMRIGHT
                     //projectileSpawn.transform.position = new Vector3(transform.position.x + 1, transform.position.y - 1, transform.position.z);
@@ -122,9 +130,9 @@ public class PlayerController : NetworkBehaviour
         }
         else
         {
-            if (mousePos.x < transform.position.x)
+            if (mousePos.x < transform.position.x - 0.5f)
             {
-                if (mousePos.y > transform.position.y)
+                if (mousePos.y > transform.position.y + 0.5f)
                 {
                     //TOPLEFT
                     //projectileSpawn.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, transform.position.z);
@@ -132,7 +140,7 @@ public class PlayerController : NetworkBehaviour
                 }
                 else
                 {
-                    if (mousePos.y < transform.position.y)
+                    if (mousePos.y < transform.position.y - 0.5f)
                     {
                         // BOTTOMLEFT
                         //projectileSpawn.transform.position = new Vector3(transform.position.x - 1, transform.position.y - 1, transform.position.z);
@@ -148,7 +156,7 @@ public class PlayerController : NetworkBehaviour
             }
             else
             {
-                if (mousePos.y > transform.position.y)
+                if (mousePos.y > transform.position.y + 0.5f)
                 {
                     // TOP
                     //projectileSpawn.transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
@@ -156,9 +164,17 @@ public class PlayerController : NetworkBehaviour
                 }
                 else
                 {
-                    //BOTTOM
-                    //projectileSpawn.transform.position = new Vector3(transform.position.x, transform.position.y - 1, transform.position.z);
-                    facing = Direction.Bottom;
+                    if (mousePos.y < transform.position.y - 0.5f)
+                    {
+                        //BOTTOM
+                        //projectileSpawn.transform.position = new Vector3(transform.position.x, transform.position.y - 1, transform.position.z);
+                        facing = Direction.Bottom;
+                    }
+                    else
+                    {
+                        facing = Direction.Center;
+                        //Debug.Log("dead zone");
+                    }
                 }
             }
         }
@@ -233,7 +249,7 @@ public class PlayerController : NetworkBehaviour
         var stepTime = 100;
         var stepSize = 0.25f;
         var stepTimeD = 100;
-        var stepSizeD = 0.20f;
+        var stepSizeD = 0.15f;
 
         switch (facing)
         {

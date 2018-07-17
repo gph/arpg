@@ -4,18 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
-public class CHAT : NetworkBehaviour {
+public class CHAT : NetworkBehaviour
+{
 
     public InputField inputField;
     public Text textHistory;
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update()
+    {
         if (inputField.text != "" && Input.GetKey(KeyCode.Return))
         {
             //Debug.Log(inputField.text);
@@ -33,6 +30,6 @@ public class CHAT : NetworkBehaviour {
     [ClientRpc]
     void RpcSendMessage(string text)
     {
-        textHistory.text = textHistory.text + "\n" + " " + text;
+        textHistory.text = text + "\n" + textHistory.text;
     }
 }
