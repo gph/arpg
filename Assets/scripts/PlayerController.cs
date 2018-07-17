@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-
+using UnityEngine.UI;
 public class PlayerController : NetworkBehaviour
 {
     // change local player sprite
@@ -37,8 +37,9 @@ public class PlayerController : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
-        
-        if (!isServer) {
+
+        if (!isServer)
+        {
             CmdSendClientName("client-" + DateTime.Now);
         }
         else
@@ -47,7 +48,6 @@ public class PlayerController : NetworkBehaviour
         }
         //hpBarObj.transform.SetParent(transform, false);
         transform.SetParent(hpBarObj.transform, false);
-        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -66,23 +66,28 @@ public class PlayerController : NetworkBehaviour
  Camera.main.transform.position = Vector3.MoveTowards(Camera.main.transform.position, new Vector3(targetPosition.x, targetPosition.y, Camera.main.transform.position.z), Time.deltaTime * 5);
 
     */
+
         timePerStep -= Time.deltaTime;
         if (Input.GetKey(KeyCode.Mouse0))
         {
 
-        if (timePerStep < 0)
-        {
-            Step();
-            timePerStep = 0.1f;
+            if (timePerStep < 0)
+            {
+                Step();
+                timePerStep = 0.1f;
+            }
         }
-        }
-
         Camera.main.transform.position = Vector3.MoveTowards(Camera.main.transform.position, new Vector3(targetPosition.x, targetPosition.y, Camera.main.transform.position.z), Time.deltaTime * 100);
+
+
+
 
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         // SET DIRECTION
-        if (mousePos.x > transform.position.x + 0.5) {
+        /*
+        if (mousePos.x > transform.position.x + 0.5)
+        {
             if (mousePos.y > transform.position.y + 0.5)
             {
                 // TOPRIGHT
@@ -94,7 +99,7 @@ public class PlayerController : NetworkBehaviour
                 if (mousePos.y < transform.position.y - 0.5)
                 {
                     // BOTTOMRIGHT
-                    projectileSpawn.transform.position = new Vector3(transform.position.x + 1, transform.position.y -1, transform.position.z);
+                    projectileSpawn.transform.position = new Vector3(transform.position.x + 1, transform.position.y - 1, transform.position.z);
                     facing = Direction.BottomRight;
                 }
                 else
@@ -148,6 +153,10 @@ public class PlayerController : NetworkBehaviour
             }
         }
 
+        */
+
+
+
         // SPRITE FLIP
         if (facing == Direction.BottomRight || facing == Direction.Right || facing == Direction.TopRight)
         {
@@ -161,7 +170,7 @@ public class PlayerController : NetworkBehaviour
         }
 
         // PROJECTILE 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
             CmdFire(Camera.main.ScreenToWorldPoint(Input.mousePosition), projectileSpawn.transform.position);
         }
@@ -251,17 +260,17 @@ public class PlayerController : NetworkBehaviour
         spriteObj.transform.localScale = new Vector3(localScale, 1, 1);
         //transform.localScale = new Vector3(localScale, 1, 1);
     }
-   
-   [Command]
-   void CmdFlipSprite(float localScale)
+
+    [Command]
+    void CmdFlipSprite(float localScale)
     {
         RpcFlipSprite(localScale);
     }
-   [ClientRpc]
-   void RpcFlipSprite(float localScale)
-   {
-       //transform.localScale = new Vector3(localScale, 1, 1);
-       spriteObj.transform.localScale = new Vector3(localScale, 1, 1);
+    [ClientRpc]
+    void RpcFlipSprite(float localScale)
+    {
+        //transform.localScale = new Vector3(localScale, 1, 1);
+        spriteObj.transform.localScale = new Vector3(localScale, 1, 1);
     }
 
 
