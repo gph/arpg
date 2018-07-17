@@ -66,11 +66,23 @@ public class PlayerController : NetworkBehaviour
  Camera.main.transform.position = Vector3.MoveTowards(Camera.main.transform.position, new Vector3(targetPosition.x, targetPosition.y, Camera.main.transform.position.z), Time.deltaTime * 5);
 
     */
+        /*
+            timePerStep -= Time.deltaTime;
+            if (Input.GetKey(KeyCode.Mouse0))
+            {
+
+                if (timePerStep < 0)
+                {
+                    Step();
+                    timePerStep = 0.1f;
+                }
+            }
+
+            */
 
         timePerStep -= Time.deltaTime;
         if (Input.GetKey(KeyCode.Mouse0))
         {
-
             if (timePerStep < 0)
             {
                 Step();
@@ -79,85 +91,92 @@ public class PlayerController : NetworkBehaviour
         }
         Camera.main.transform.position = Vector3.MoveTowards(Camera.main.transform.position, new Vector3(targetPosition.x, targetPosition.y, Camera.main.transform.position.z), Time.deltaTime * 100);
 
-
-
-
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
+
         // SET DIRECTION
-        /*
-        if (mousePos.x > transform.position.x + 0.5)
+
+        if (mousePos.x > transform.position.x)
         {
-            if (mousePos.y > transform.position.y + 0.5)
+            if (mousePos.y > transform.position.y)
             {
                 // TOPRIGHT
-                projectileSpawn.transform.position = new Vector3(transform.position.x + 1, transform.position.y + 1, transform.position.z);
+                //projectileSpawn.transform.position = new Vector3(transform.position.x + 1, transform.position.y + 1, transform.position.z);
                 facing = Direction.TopRight;
             }
             else
             {
-                if (mousePos.y < transform.position.y - 0.5)
+                if (mousePos.y < transform.position.y)
                 {
                     // BOTTOMRIGHT
-                    projectileSpawn.transform.position = new Vector3(transform.position.x + 1, transform.position.y - 1, transform.position.z);
+                    //projectileSpawn.transform.position = new Vector3(transform.position.x + 1, transform.position.y - 1, transform.position.z);
                     facing = Direction.BottomRight;
                 }
                 else
                 {
                     // RIGHT
-                    projectileSpawn.transform.position = new Vector3(transform.position.x + 1, transform.position.y, transform.position.z);
+                    //projectileSpawn.transform.position = new Vector3(transform.position.x + 1, transform.position.y, transform.position.z);
                     facing = Direction.Right;
                 }
             }
         }
         else
         {
-            if (mousePos.x < transform.position.x - 0.5)
+            if (mousePos.x < transform.position.x)
             {
-                if (mousePos.y > transform.position.y + 0.5)
+                if (mousePos.y > transform.position.y)
                 {
                     //TOPLEFT
-                    projectileSpawn.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, transform.position.z);
+                    //projectileSpawn.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, transform.position.z);
                     facing = Direction.TopLeft;
                 }
                 else
                 {
-                    if (mousePos.y < transform.position.y - 0.5)
+                    if (mousePos.y < transform.position.y)
                     {
                         // BOTTOMLEFT
-                        projectileSpawn.transform.position = new Vector3(transform.position.x - 1, transform.position.y - 1, transform.position.z);
+                        //projectileSpawn.transform.position = new Vector3(transform.position.x - 1, transform.position.y - 1, transform.position.z);
                         facing = Direction.BottomLeft;
                     }
                     else
                     {
                         // LEFT
-                        projectileSpawn.transform.position = new Vector3(transform.position.x - 1, transform.position.y, transform.position.z);
+                        //projectileSpawn.transform.position = new Vector3(transform.position.x - 1, transform.position.y, transform.position.z);
                         facing = Direction.Left;
                     }
                 }
             }
             else
             {
-                if (mousePos.y > transform.position.y + 0.5)
+                if (mousePos.y > transform.position.y)
                 {
                     // TOP
-                    projectileSpawn.transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+                    //projectileSpawn.transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
                     facing = Direction.Top;
                 }
                 else
                 {
                     //BOTTOM
-                    projectileSpawn.transform.position = new Vector3(transform.position.x, transform.position.y - 1, transform.position.z);
+                    //projectileSpawn.transform.position = new Vector3(transform.position.x, transform.position.y - 1, transform.position.z);
                     facing = Direction.Bottom;
                 }
             }
         }
 
-        */
 
-
+        // FLIP_SPRITE
+        if (facing == Direction.BottomRight || facing == Direction.Right || facing == Direction.TopRight)
+        {
+            CmdFlipSprite(-1);
+        }
+        else
+        {
+            CmdFlipSprite(1);
+        }
+        // END FLIP_SPRITE
 
         // SPRITE FLIP
+        /*
         if (facing == Direction.BottomRight || facing == Direction.Right || facing == Direction.TopRight)
         {
             //OnSpriteFlip(-1);
@@ -169,6 +188,7 @@ public class PlayerController : NetworkBehaviour
             CmdFlipSprite(1);
         }
 
+        */
         // PROJECTILE 
         if (Input.GetKey(KeyCode.Space))
         {
