@@ -87,11 +87,13 @@ public class PlayerController : NetworkBehaviour
         timePerStep -= Time.deltaTime;
         if (Input.GetKey(KeyCode.Mouse0))
         {
-            // AVOID CLICKS THROUGH INTERFACE
+            // AVOID CLICKS THROUGH INTERFACE 
+            /*
             if (EventSystem.current.IsPointerOverGameObject())
             {
                 return;
             }
+            */
             if (timePerStep < 0)
             {
                 Step();
