@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class FPS : MonoBehaviour {
+public class _FPS : MonoBehaviour {
 
     public Text fpsText;
-    public float deltaTime;
+    private float deltaTime;
 
     // Update is called once per frame
     void Update()
