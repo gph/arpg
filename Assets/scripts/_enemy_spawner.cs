@@ -20,7 +20,7 @@ public class _enemy_spawner : NetworkBehaviour
         {
             int temp_nEnemies = numberOfEnemies;
             temp_nEnemies = Random.Range(0, numberOfEnemies + 1);
-            Debug.Log(temp_nEnemies);
+            //Debug.Log(temp_nEnemies);
             for (int i = 0; i < temp_nEnemies; i++)
             {
                 var spawnPosition = Vector3.zero;

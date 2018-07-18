@@ -14,7 +14,7 @@ public class Health : NetworkBehaviour
 
     public RectTransform healthBar;
 
-    public bool destroyOnDeath;
+    public bool isEnemies;
 
     private NetworkStartPosition[] spawnPoints;
 
@@ -35,7 +35,7 @@ public class Health : NetworkBehaviour
         if (currentHealth <= 0)
         {
 
-            if (destroyOnDeath)
+            if (isEnemies)
             {
                 Destroy(gameObject);
             }

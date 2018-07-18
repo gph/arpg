@@ -49,13 +49,9 @@ public class _player_movement : NetworkBehaviour
                 Step();
                 timeToWalk = 0.05f;
                 
-            }          
+            }
         }
         // END_MOVEMENT
-        if (Input.GetKey(KeyCode.Mouse0))
-        {
-
-        }
 
         // START_FLIP
         if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x + 0.5f)

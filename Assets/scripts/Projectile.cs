@@ -15,8 +15,8 @@ public class Projectile : MonoBehaviour {
         var health = hit.GetComponent<Health>();
         if (health != null && collision.transform.name != transform.parent.name)
         {
-            health.TakeDamage(10);
+            health.TakeDamage(50);
         }
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 }
