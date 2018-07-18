@@ -16,8 +16,8 @@ public class EnemySpawner : NetworkBehaviour
         for (int i = 0; i < numberOfEnemies; i++)
         {
             var spawnPosition = new Vector3(
-                Random.Range(2.0f, 5.0f),
-                Random.Range(1.0f, 3.0f),
+                Random.Range(2, 5),
+                Random.Range(1, 3),
                 0.0f);
             while (Contains(spawnPosition, alreadySpawned))
             {

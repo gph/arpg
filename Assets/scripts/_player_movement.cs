@@ -12,6 +12,7 @@ public class _player_movement : NetworkBehaviour
     private float cameraSpeed;
     private float movementSpeed;
     private float timeToWalk;
+
     void Start()
     {
         if (!isServer)
@@ -35,6 +36,7 @@ public class _player_movement : NetworkBehaviour
         {
             return;
         }
+        // START_MOVEMENT
         timeToWalk -= Time.deltaTime;
         if (Input.GetKey(KeyCode.Mouse0))
         {
@@ -49,6 +51,13 @@ public class _player_movement : NetworkBehaviour
                 
             }          
         }
+        // END_MOVEMENT
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+
+        }
+
+        // START_FLIP
         if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x + 0.5f)
         {
             CmdFlipSprite(1);
@@ -61,7 +70,11 @@ public class _player_movement : NetworkBehaviour
         {
 
         }
+        // END_FLIP
+        
+        // START_CAMERA_MOVEMENT
         Camera.main.transform.position = Vector3.MoveTowards(Camera.main.transform.position, new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z), Time.deltaTime * cameraSpeed);
+        // END_CAMERA_MOVEMENT
     }
 
     void Step()
