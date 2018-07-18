@@ -18,42 +18,12 @@ public class _enemy_spawner : NetworkBehaviour
 
         for (int x = 0; x < spawnablePosition.Length; x++)
         {
-            for (int i = 0; i < numberOfEnemies; i++)
+            int temp_nEnemies = numberOfEnemies;
+            temp_nEnemies = Random.Range(0, numberOfEnemies + 1);
+            Debug.Log(temp_nEnemies);
+            for (int i = 0; i < temp_nEnemies; i++)
             {
                 var spawnPosition = Vector3.zero;
-                /*
-                switch (i)
-                {
-                    case 0:
-                        spawnPosition = new Vector3(spawnablePosition[x].transform.position.x, spawnablePosition[x].transform.position.y, 0.0f);
-                        break;
-                    case 1:
-                        spawnPosition = new Vector3(spawnablePosition[x].transform.position.x + 1, spawnablePosition[x].transform.position.y, 0.0f);
-                        break;
-                    case 2:
-                        spawnPosition = new Vector3(spawnablePosition[x].transform.position.x + 2, spawnablePosition[x].transform.position.y, 0.0f);
-                        break;
-                    case 3:
-                        spawnPosition = new Vector3(spawnablePosition[x].transform.position.x, spawnablePosition[x].transform.position.y + 0.5f, 0.0f);
-                        break;
-                    case 4:
-                        spawnPosition = new Vector3(spawnablePosition[x].transform.position.x + 1, spawnablePosition[x].transform.position.y + 0.5f, 0.0f);
-                        break;
-                    case 5:
-                        spawnPosition = new Vector3(spawnablePosition[x].transform.position.x + 1, spawnablePosition[x].transform.position.y + 1, 0.0f);
-                        break;
-                    case 6:
-                        spawnPosition = new Vector3(spawnablePosition[x].transform.position.x, spawnablePosition[x].transform.position.y + 1, 0.0f);
-                        break;
-                    case 7:
-                        spawnPosition = new Vector3(spawnablePosition[x].transform.position.x + 2, spawnablePosition[x].transform.position.y + 0.5f, 0.0f);
-                        break;
-                    case 8:
-                        spawnPosition = new Vector3(spawnablePosition[x].transform.position.x + 2, spawnablePosition[x].transform.position.y + 1, 0.0f);
-                        break;
-                }
-                */
-                //var spawnPosition = new Vector3(spawnablePosition[x].transform.position.x + i, spawnablePosition[x].transform.position.y, 0.0f);
 
                 switch (i)
                 {
