@@ -41,7 +41,7 @@ public class Health : NetworkBehaviour
             }
             else
             {
-                Debug.Log(transform.name + " is DEAD!");
+                //Debug.Log(transform.name + " is DEAD!");
                 gameObject.SetActive(false);
                 currentHealth = maxHealth;
                 // called on the Server, but invoked on the Clients

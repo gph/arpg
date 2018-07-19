@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour {
-
+    /*
     void OnCollisionEnter2D(Collision2D collision)
     {
         //Debug.Log("PROJECTILE>COLLISION_NAME>PROJECTILE_ROOT_OBJ: " + transform.name + ">" + collision.transform.name + ">" + transform.parent.name);
@@ -13,10 +13,13 @@ public class Projectile : MonoBehaviour {
         //collision.gameObject.GetComponent<Rigidbody2D>().angularVelocity = 0;
 
         var health = hit.GetComponent<Health>();
+        /*
         if (health != null && collision.transform.name != transform.parent.name)
         {
-            health.TakeDamage(50);
+            health.TakeDamage(10);
         }
+      
         //Destroy(gameObject);
     }
+      */
 }

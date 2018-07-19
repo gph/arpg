@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class _enemy_movement : MonoBehaviour {
+public class _enemy_controller : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
